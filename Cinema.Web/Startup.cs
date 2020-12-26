@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Web.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cinema.Web
 {
@@ -27,6 +28,9 @@ namespace Cinema.Web
 
             services.AddDbContext<CinemaContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("CinemaContext")));
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<CinemaContext>();
             services.AddSwaggerGen();
         }
 
@@ -58,6 +62,7 @@ namespace Cinema.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -65,6 +70,11 @@ namespace Cinema.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+                //endpoints.MapControllerRoute(
+                //    name: "areas",
+                //    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                //  );
             });
         }
     }

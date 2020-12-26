@@ -20,10 +20,35 @@ namespace Cinema.Web.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, int pageIndex = 1)
         {
-            var cinemaContext = _context.Movie.Include(m => m.Producer);
-            return View(await cinemaContext.ToListAsync());
+            int pageSize = 2;
+            ViewBag.CurrentSortOrder = sortOrder;
+            ViewBag.TitleSortParam = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewBag.ReleaseDateSortParam = sortOrder == "release_date" ? "release_date_desc" : "release_date";
+            ViewBag.CurrentFilter = searchString;
+            IQueryable<Movie> movies = _context.Movie;
+
+            if(!string.IsNullOrWhiteSpace(searchString))
+            {
+                movies = movies.Where(x => x.Title.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "title_desc": movies = movies.OrderByDescending(x => x.Title);
+                    break;
+                case "release_date": movies = movies.OrderBy(x => x.ReleaseDate);
+                    break;
+                case "release_date_desc": movies = movies.OrderByDescending(x => x.ReleaseDate);
+                    break;
+                default:
+                    movies = movies.OrderBy(x => x.Title);
+                    break;
+            }
+
+            var paginatedList = await PaginatedList<Movie>.CreateAsync(movies.Include(m => m.Producer), pageIndex, pageSize);
+
+            return View(paginatedList);
         }
 
         // GET: Movies/Details/5

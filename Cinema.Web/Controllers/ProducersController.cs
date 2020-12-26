@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Web.Data;
 using Cinema.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cinema.Web
 {
+    
     public class ProducersController : Controller
     {
         private readonly CinemaContext _context;
@@ -44,6 +46,7 @@ namespace Cinema.Web
         }
 
         // GET: Producers/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +57,7 @@ namespace Cinema.Web
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Birthday,CountOfFilms,Id")] Producer producer)
         {
             if (ModelState.IsValid)
@@ -66,6 +70,7 @@ namespace Cinema.Web
         }
 
         // GET: Producers/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +91,7 @@ namespace Cinema.Web
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Email,Birthday,CountOfFilms,Id")] Producer producer)
         {
             if (id != producer.Id)
@@ -117,6 +123,7 @@ namespace Cinema.Web
         }
 
         // GET: Producers/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +144,7 @@ namespace Cinema.Web
         // POST: Producers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var producer = await _context.Producer.FindAsync(id);

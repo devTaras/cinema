@@ -1,10 +1,12 @@
 ﻿using Cinema.Web.Models;
 using Cinema.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Web.Controllers
 {
+    
     public class ProducerListController : Controller
     {
         private readonly IListService<Producer> listProducer;

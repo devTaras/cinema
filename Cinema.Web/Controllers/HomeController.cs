@@ -1,4 +1,5 @@
-﻿using Cinema.Web.Models;
+﻿using Cinema.Web.Data;
+using Cinema.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,7 +20,7 @@ namespace Cinema.Web.Controllers
         }
 
         public IActionResult Index()
-        {
+        {            
             return View();
         }
 
