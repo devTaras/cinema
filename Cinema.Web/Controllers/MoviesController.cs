@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Web.Data;
 using Cinema.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cinema.Web.Controllers
 {
@@ -20,6 +21,7 @@ namespace Cinema.Web.Controllers
         }
 
         // GET: Movies
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string sortOrder, string searchString, int pageIndex = 1)
         {
             int pageSize = 2;

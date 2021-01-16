@@ -5,4 +5,108 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <h1 style="color:green;">
+        Movies
+    </h1>
+
+    <p id="GFG_UP" style="font-size: 15px; font-weight: bold;">
+    </p>
+
+    <br><br>
+
+    <table id="table" align="center" border="1px"></table>
+
+
 </div>
+@section Scripts
+{
+    <script>
+        var el_up = document.getElementById("GFG_UP"); 
+
+        fetch('/api/Movies', {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json"
+            },
+            body: '{ \
+            "title": "2012 Movoie", \
+            "releaseDate": "2021-01-16",\
+            "price": 100, \
+            "genre": 0, \
+            "rating": "34", \
+            "producerId": 1 }'
+        }).then(
+            data => console.log(data)
+        ).catch (error => { alert("Тут сталася помилка" + error) });
+
+        fetch('/api/Movies/1006', {
+            method: 'DELETE'
+        }).then(
+            data => {
+                console.log(data);
+                fetch('/api/Movies', {
+                    method: 'GET'
+                })
+                    .then(data => {
+                        let divElement = document.getElementById("movies");
+                        //textElement.innerHTML = "Session";
+
+                        data.json().then(list => {
+                            el_up.innerHTML = "Click on the button to create the "
+                                + "table from the JSON data.<br><br>"
+                                + JSON.stringify(list[0]) + "<br>"
+                                + JSON.stringify(list[1]) + "<br>"
+                                + JSON.stringify(list[2]);
+
+                            var cols = [];
+
+                            for (var i = 0; i < list.length; i++) {
+                                for (var k in list[i]) {
+                                    if (cols.indexOf(k) === -1) {
+
+                                        // Push all keys to the array 
+                                        cols.push(k);
+                                    }
+                                }
+                            }
+
+                            // Create a table element 
+                            var table = document.createElement("table");
+
+                            // Create table row tr element of a table 
+                            var tr = table.insertRow(-1);
+
+                            for (var i = 0; i < cols.length; i++) {
+
+                                // Create the table header th element 
+                                var theader = document.createElement("th");
+                                theader.innerHTML = cols[i];
+
+                                // Append columnName to the table row 
+                                tr.appendChild(theader);
+                            }
+
+                            // Adding the data to the table 
+                            for (var i = 0; i < list.length; i++) {
+
+                                // Create a new row 
+                                trow = table.insertRow(-1);
+                                for (var j = 0; j < cols.length; j++) {
+                                    var cell = trow.insertCell(-1);
+
+                                    // Inserting the cell at particular place 
+                                    cell.innerHTML = list[i][cols[j]];
+                                }
+                            }
+
+                            // Add the newely created table containing json data 
+                            var el = document.getElementById("table");
+                            el.innerHTML = "";
+                            el.appendChild(table);
+                        })
+                    }).catch(error => { alert("Тут сталася помилка" + error) });
+            }
+        ).catch(error => { alert("Тут сталася помилка" + error) });
+    </script>
+}

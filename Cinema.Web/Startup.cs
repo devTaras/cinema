@@ -30,6 +30,7 @@ namespace Cinema.Web
                     options.UseSqlServer(Configuration.GetConnectionString("CinemaContext")));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<CinemaContext>();
             services.AddSwaggerGen();
         }

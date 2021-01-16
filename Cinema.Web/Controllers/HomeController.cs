@@ -1,5 +1,7 @@
 ﻿using Cinema.Web.Data;
 using Cinema.Web.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,14 +15,27 @@ namespace Cinema.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            ILogger<HomeController> logger)
         {
+            _userManager = userManager;
+            _roleManager = roleManager;
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {            
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+             // await _roleManager.CreateAsync(new IdentityRole { Id = "user", Name = "User" });
+           
+            // var user = await _userManager.FindByNameAsync(this.User.Identity.Name);
+            // await _userManager.AddToRoleAsync(user, "Admin");
+            
             return View();
         }
 

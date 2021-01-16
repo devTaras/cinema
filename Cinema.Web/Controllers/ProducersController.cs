@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Cinema.Web
 {
-    
+    [Authorize]
     public class ProducersController : Controller
     {
         private readonly CinemaContext _context;
@@ -22,6 +22,7 @@ namespace Cinema.Web
         }
 
         // GET: Producers
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Producer.ToListAsync());
